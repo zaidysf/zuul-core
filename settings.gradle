@@ -1,0 +1,2 @@
+include ':ut-common-utils'
+project(':ut-common-utils').projectDir = new File(settingsDir, '../ut-revamp-common-utils')
