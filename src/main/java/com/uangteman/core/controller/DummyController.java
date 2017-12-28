@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uangteman.common.utils.rest.RestResponse;
 import com.uangteman.core.model.BankModel;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
+@Component
 public class DummyController {
 
     public String getAgeRange(String jsonString, String ServiceUrl){

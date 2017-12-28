@@ -3,6 +3,7 @@ package com.uangteman.core.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.ZuulFilter;
+import com.uangteman.core.controller.DummyController;
 import com.uangteman.core.controller.HelperController;
 import org.hibernate.id.uuid.Helper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class PostFilter extends ZuulFilter {
 
     @Autowired
     private HelperController helper;
+
+    @Autowired
+    private DummyController dummy;
 
     @Value( "${zuul.routes.master-service.url}" )
     private String masterServiceUrl;
@@ -53,7 +57,7 @@ public class PostFilter extends ZuulFilter {
         }
         String jsonInString = "";
         if(aURL.getPath().equals("/core-service/master-service/age-range")){
-            jsonInString = ts.getAgeRange(json, masterServiceUrl);
+            jsonInString = dummy.getAgeRange(json, masterServiceUrl);
             ctx.setResponseBody(jsonInString);
         }
         else {
