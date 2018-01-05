@@ -1,59 +1,64 @@
 package com.uangteman.core.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uangteman.common.utils.rest.RestResponse;
-import com.uangteman.core.model.BankModel;
+import com.uangteman.core.model.AgeRangeDTO;
+import com.uangteman.core.model.BankDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class DummyController {
 
     public String getAgeRange(String jsonString, String ServiceUrl){
+
         ObjectMapper mapper = new ObjectMapper();
-        RestResponse value = null;
+        RestResponse value = new RestResponse();
         try {
+
             value = mapper.readValue(jsonString, RestResponse.class);
-        } catch (IOException e) {
+            List<Map> ageRangeList = mapper.convertValue(value.getData(), List.class);
+            String url = ServiceUrl + "/master-service/bank/search/";
+
+            List<AgeRangeDTO> listOfAgeRange = ageRangeList.stream().map(ar -> getBank(ar, url)).collect(Collectors.toList());
+
+            return mapper.writeValueAsString(RestResponse.ok(value.getResult_code(), value.getMessage(), listOfAgeRange));
+
+        } catch (Exception e) {
+
             e.printStackTrace();
-        }
-        Object counter = value.getData();
-        String url = ServiceUrl + "/master-service/bank/search/";
 
-        for(int i = 0; i < counter; i++) {
-            BankModel bankDetail = getDetail(url,value.getData().get(i).getId());
-            value.getData().get(i).setBankDetail(bankDetail);
         }
 
-        String jsonInString = null;
-        try {
-            jsonInString = mapper.writeValueAsString(value);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        return null;
 
-        return jsonInString;
     }
 
-    private static BankModel getDetail(String url, long id){
-
-        RestTemplate restTemplate = new RestTemplate();
-        String newjson = restTemplate.getForObject(url + id, String.class);
+    private AgeRangeDTO getBank(Map ar, String url){
 
         ObjectMapper mapper = new ObjectMapper();
-        RestResponse newvalue = null;
-        try {
-            newvalue = mapper.readValue(newjson, RestResponse.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        RestTemplate restTemplate = new RestTemplate();
+        RestResponse response = restTemplate.getForObject(url+ar.get("id"), RestResponse.class);
 
-        BankModel bankDetail = newvalue.getData();
+        AgeRangeDTO arDTO = new AgeRangeDTO();
 
-        return bankDetail;
+        BankDTO bankDTO = mapper.convertValue(response.getData(), BankDTO.class);
+
+        arDTO.setId((Integer) ar.get("id"));
+        arDTO.setName((String) ar.get("name"));
+        arDTO.setState((String) ar.get("state"));
+        arDTO.setCreatedAt((Long) ar.get("createdAt"));
+        arDTO.setCreatedBy((Integer) ar.get("createdBy"));
+        arDTO.setUpdatedAt((Long) ar.get("updatedAt"));
+        arDTO.setUpdatedBy((Integer) ar.get("UpdatedBy"));
+        arDTO.setBankName(bankDTO.getName());
+
+        return arDTO;
+
     }
 
 }

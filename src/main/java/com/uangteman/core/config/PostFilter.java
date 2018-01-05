@@ -55,6 +55,7 @@ public class PostFilter extends ZuulFilter {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
         String jsonInString = "";
         if(aURL.getPath().equals("/core-service/master-service/age-range")){
             jsonInString = dummy.getAgeRange(json, masterServiceUrl);
@@ -64,7 +65,7 @@ public class PostFilter extends ZuulFilter {
             ctx.setResponseBody(json);
         }
 
-        System.out.println("Request Method : " + request.getMethod() + " Request URL : " + request.getRequestURL().toString());
+        // System.out.println("Request Method : " + request.getMethod() + " Request URL : " + request.getRequestURL().toString());
         return null;
     }
 

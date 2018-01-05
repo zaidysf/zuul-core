@@ -1,31 +1,53 @@
 package com.uangteman.core.model;
 
-public class BankModel {
-    Long id;
-    Long sort;
-    String name;
-    String code;
-    String clearingCode;
-    String swift;
-    String state;
-    Long createdAt;
-    Long createdBy;
-    Long updatedAt;
-    Long updatedBy;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    public Long getId() {
+public class BankDTO {
+
+    Integer id;
+
+    @JsonIgnore
+    Integer sort;
+
+    String name;
+
+    @JsonIgnore
+    String code;
+
+    @JsonIgnore
+    String clearingCode;
+
+    @JsonIgnore
+    String swift;
+
+    @JsonIgnore
+    String state;
+
+    @JsonIgnore
+    Long createdAt;
+
+    @JsonIgnore
+    Integer createdBy;
+
+    @JsonIgnore
+    Long updatedAt;
+
+    @JsonIgnore
+    Integer updatedBy;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getSort() {
+    public Integer getSort() {
         return sort;
     }
 
-    public void setSort(Long sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
     }
 
@@ -77,11 +99,11 @@ public class BankModel {
         this.createdAt = createdAt;
     }
 
-    public Long getCreatedBy() {
+    public Integer getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Long createdBy) {
+    public void setCreatedBy(Integer createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -93,11 +115,11 @@ public class BankModel {
         this.updatedAt = updatedAt;
     }
 
-    public Long getUpdatedBy() {
+    public Integer getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(Long updatedBy) {
+    public void setUpdatedBy(Integer updatedBy) {
         this.updatedBy = updatedBy;
     }
 }
